@@ -12,6 +12,6 @@ class Hourly(
     }
 
     override fun toString(): String {
-        return "Hourly(name='$name', id=$id, rate=$rate, hours=$hours)"
+        return "Hourly(name=$name, id=$id, rate=$rate, hours=$hours)"
     }
 }

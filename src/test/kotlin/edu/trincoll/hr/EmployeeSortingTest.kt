@@ -1,60 +1,52 @@
-package edu.trincoll.hr
+package edu.trincoll.koans.solutions
 
-import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Test
+// Rename on import
+import kotlin.random.Random as KRandom
+import java.util.Random as JRandom
 
-class EmployeeSortingTest {
+// Data classes
+data class Person(val name: String, val age: Int)
 
-    @Test
-    fun `test sorting employees with different pay`() {
-        val employees = listOf<Employee>(
-            Salaried("Alice", 1, 60000.0),
-            Hourly("Bob", 2, 25.0, 80.0),
-            Salaried("Charlie", 3, 52000.0)
-        )
-
-        val sortedEmployees = employees.sorted()
-
-        assertEquals(listOf("Bob", "Charlie", "Alice"), sortedEmployees.map { it.name })
-    }
-
-    @Test
-    fun `test sorting employees with same pay but different names`() {
-        val employees = listOf(
-            Salaried("Charlie", 1, 52000.0),
-            Salaried("Alice", 2, 52000.0),
-            Salaried("Bob", 3, 52000.0)
-        )
-
-        val sortedEmployees = employees.sorted()
-
-        assertEquals(listOf("Alice", "Bob", "Charlie"), sortedEmployees.map { it.name })
-    }
-
-    @Test
-    fun `test sorting employees with same pay and name but different IDs`() {
-        val employees = listOf(
-            Salaried("Alice", 3, 52000.0),
-            Salaried("Alice", 1, 52000.0),
-            Salaried("Alice", 2, 52000.0)
-        )
-
-        val sortedEmployees = employees.sorted()
-
-        assertEquals(listOf(1, 2, 3), sortedEmployees.map { it.id })
-    }
-
-    @Test
-    fun `test sorting mixed employee types`() {
-        val employees = listOf(
-            Salaried("Alice", 1, 52000.0),
-            Hourly("Bob", 2, 25.0, 80.0),
-            Salaried("Charlie", 3, 60000.0),
-            Hourly("David", 4, 30.0, 70.0)
-        )
-
-        val sortedEmployees = employees.sorted()
-
-        assertEquals(listOf("Alice", "Bob", "Charlie", "David"), sortedEmployees.map { it.name })
-    }
+fun getPeople(): List<Person> {
+    return listOf(Person("Alice", 29), Person("Bob", 31))
 }
+
+fun comparePeople(): Boolean {
+    val p1 = Person("Alice", 29)
+    val p2 = Person("Alice", 29)
+    return p1 == p2
+}
+
+// Smart casts
+fun evalSmartCasts(expr: Expr): Int =
+    when (expr) {
+        is Num -> expr.value
+        is Sum -> evalSmartCasts(expr.left) + evalSmartCasts(expr.right)
+    }
+
+sealed interface Expr
+class Num(val value: Int) : Expr
+class Sum(val left: Expr, val right: Expr) : Expr
+
+// Sealed classes
+fun eval(expr: Expr): Int =
+    when (expr) {
+        is Num -> expr.value
+        is Sum -> eval(expr.left) + eval(expr.right)
+    }
+
+
+fun useDifferentRandomClasses(): String {
+    return "Kotlin random: " +
+            KRandom.nextInt(2) +
+            " Java random:" +
+            JRandom().nextInt(2) +
+            "."
+}
+
+// Extension functions
+fun Int.r(): RationalNumber = RationalNumber(this, 1)
+
+fun Pair<Int, Int>.r(): RationalNumber = RationalNumber(first, second)
+
+data class RationalNumber(val numerator: Int, val denominator: Int)
